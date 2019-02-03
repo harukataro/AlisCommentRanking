@@ -1,60 +1,69 @@
 <!DOCTYPE html>
 <html>
-  <head>
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/websaite#">
+  <meta property="og:url" content="http://tinyurl.com/alis-comment" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ALISコメントランキング" />
+  <meta property="og:description" content="ALISの記事を独自の方法でランキングしています。トップ３００個の記事のコメント数でランキング。話題の記事がみつかります" />
+  <meta property="og:site_name" content="はるか先生 presents" />
+  <meta property="og:image" content="EYECATCH IMAGE FILE WEB ADDRESS" />
+  <meta name="twitter:card" content="Summary with Large Image" />
+  <meta name="twitter:site" content="@harukatarotaro" />
+  
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
       <base target="_top">
   </head>
   <body>
   <br>
-  <h1><center>ALISコメントランキング</center></h1>
-
-   <P><center><font size ="10">
-   ６時間ごとにアップデート。<br>投げ銭ウエルカムかむ
-   <a href="https://alis.to/users/haruka">はるか先生</a><br>
-   </font>
-   </center>
-   <br>
-   <br>
-
-   <div class="table-responsive">
-   <table class="table table-striped  table-condensed">
-
+  <center>
+  <h1>ALISコメントランキング 
+  by <a href="https://alis.to/users/haruka">はるか先生</a></h1>
+  
+  </center><div class="table-responsive">
+   <table class="table table-striped  table-condensed">   
    <tbody>
    <?
-    var sheetidx ="1WibZUfIYFVaIvE9brXEDuRU8HsCSmofBPI5VeOwl1Mc";
-    var webAdd;
-    var br = "<br>"; //改行
-    var userName;
-    var eyecatch;
-
+    var sheetidx ="GOOGLE SPREAD SHEET ID";
+    var br = "<br>";
+    var count = 0;
+    var ad = [];
     var myData = SpreadsheetApp.openById(sheetidx).getSheetByName('Ranking').getDataRange().getValues();
+    var myAd   = SpreadsheetApp.openById(sheetidx).getSheetByName('ad').getDataRange().getValues();
+    
+    for(var s = 0;s < 2;s++){
+    var ad_1 =  '<tr><th class="align-middle"><a href="' + myAd[s][1] + '"><img src="' + myAd[s][2] + '" width="270px"></a><br><center>ad</center></th>';
+    var ad_2 =  '<th class="align-middle"><font size ="10"><a href="' + myAd[s][1] +'">'+ myAd[s][0] + '</a><br>' + myAd[s][3] + '</font></th>';
+    var ad_3 =  '<th class="align-middle"><font size ="10"><center>'+ 'ー' + '</center></font></th></tr>';
+    ad[s] = ad_1 + ad_2 + ad_3;
+    }
 
-    for(var i=0;i<myData.length;i++){
- //pick up article that have comment
-
-     if(myData[i][4] > 4){
-       webAdd = '<a href="https://alis.to/' + myData[i][2] + '/articles/' + myData[i][1] +'">' + myData[i][3] + '</a>';
-       eyecatch ='<a href="https://alis.to/' + myData[i][2] + '/articles/' + myData[i][1] +'">' + '<img src="' + myData[i][7] + '" width="270px"></a>';
-
-       Logger.log(eyecatch);
-       userName = myData[i][5].toString().replace(/,/g,br);
-
-         output.append('<tr>');
-         output.append('<th class="align-middle">' + eyecatch  + '</th>');
+    for(var i = 0;i< myData.length;i++){
+     if(myData[i][4] > 2){
+       var url_article = '<a href="https://alis.to/' + myData[i][2] + '/articles/' + myData[i][1] +'">';
+       var webAdd =  url_article + myData[i][3] + '</a>';    
+       var eyecatch =url_article + '<img src="' + myData[i][7] + '" width="270px"></a>';       
+       var userName = myData[i][5].toString().replace(/,/g,br);
+       
+       //Advertized area
+       if(count == 3){output.append(ad[0]);}
+       if(count == 8){output.append(ad[1]);}
+       
+         output.append('<tr><th class="align-middle">' + eyecatch +'<br><center>'+myData[i][6] +'</center>' + '</th>');
          output.append('<th class="align-middle"><font size ="10">'+ webAdd + '<br>'+ myData[i][2]　+　'</font></th>');
-         output.append('<th class="align-middle"><font size ="10"><center>' + myData[i][4] + '</center></font></th>');
-         output.append('</tr>');
-
-       }
+         output.append('<th class="align-middle"><font size ="10"><center>' + myData[i][4] + '</center></font></th></tr>');  
+         count += 1; 
+         }
       }
-
-
+        
     ?>
     </tbody>
     </table>
     </div>
     <br><br><br>
-
+    
 <?!= HtmlService.createHtmlOutputFromFile('js').getContent(); ?>
 </body>
 </html>
+
+
+
